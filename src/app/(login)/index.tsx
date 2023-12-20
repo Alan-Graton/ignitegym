@@ -41,7 +41,12 @@ export default function Login() {
           />
           <AppTextInput placeholder="Senha" secureTextEntry />
 
-          <AppButton title="Acessar" />
+          <AppButton
+            title="Acessar"
+            onPress={() => {
+              router.push("/(tabs)/(home)");
+            }}
+          />
         </Center>
 
         <Center mt={24}>

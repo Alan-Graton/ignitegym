@@ -42,7 +42,12 @@ export default function SignUp() {
           />
           <AppTextInput placeholder="Senha" secureTextEntry />
 
-          <AppButton title="Criar e acessar" />
+          <AppButton
+            title="Criar e acessar"
+            onPress={() => {
+              router.push("/(tabs)/home");
+            }}
+          />
         </Center>
 
         <AppButton
