@@ -1,4 +1,5 @@
 import { Slot } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 import {
   useFonts,
@@ -6,25 +7,33 @@ import {
   Roboto_700Bold,
 } from "@expo-google-fonts/roboto";
 
-import { StatusBar } from "expo-status-bar";
-import { NativeBaseProvider } from "native-base";
-import { THEME } from "@/theme";
 import { AppLoader } from "@/components/AppLoader";
+
+import { NativeBaseProvider, Box } from "native-base";
+import { THEME } from "@/theme";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
 
+  const AppSlot = () => {
+    return (
+      <Box flex={1} bg="gray.700">
+        <Slot />
+      </Box>
+    );
+  };
+
   return (
     <>
       <NativeBaseProvider theme={THEME}>
-        {fontsLoaded ? <Slot /> : <AppLoader />}
-        <StatusBar
-          translucent
-          animated
-          backgroundColor="transparent"
-          style="light"
-        />
+        {fontsLoaded ? <AppSlot /> : <AppLoader />}
       </NativeBaseProvider>
+      <StatusBar
+        animated
+        translucent
+        style="inverted"
+        backgroundColor="transparent"
+      />
     </>
   );
 }
