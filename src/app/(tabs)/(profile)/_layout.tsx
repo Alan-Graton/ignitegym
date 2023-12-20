@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
 
 export default function ProfileLayout() {
-  return <Tabs />;
+  return <Tabs.Screen />;
 }
