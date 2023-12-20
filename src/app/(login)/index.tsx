@@ -1,3 +1,5 @@
+import { router } from "expo-router";
+
 import { Center, Text, Heading, VStack, Image, ScrollView } from "native-base";
 
 import { AppTextInput } from "@/components/AppTextInput";
@@ -44,7 +46,13 @@ export default function Login() {
           <Text color="gray.100" mb={3} fontSize="sm" fontFamily="body">
             Ainda não tem acesso?
           </Text>
-          <AppButton title="Criar conta" variant="outline" />
+          <AppButton
+            title="Criar conta"
+            variant="outline"
+            onPress={() => {
+              router.push("/(signup)");
+            }}
+          />
         </Center>
       </VStack>
     </ScrollView>
