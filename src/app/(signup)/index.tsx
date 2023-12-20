@@ -14,7 +14,7 @@ export default function SignUp() {
       contentContainerStyle={{ flexGrow: 1 }}
       showsVerticalScrollIndicator={false}
     >
-      <VStack flex={1} bg="gray.700" px={10}>
+      <VStack flex={1} bg="gray.700" px={10} pb={16}>
         <Image
           source={BackgroundImg}
           alt="Background Image"
