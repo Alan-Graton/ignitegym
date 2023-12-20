@@ -19,6 +19,12 @@ export default function RootLayout() {
     return (
       <Box flex={1} bg="gray.700">
         <Slot />
+        <StatusBar
+          animated
+          translucent
+          style="light"
+          backgroundColor="transparent"
+        />
       </Box>
     );
   };
@@ -28,12 +34,6 @@ export default function RootLayout() {
       <NativeBaseProvider theme={THEME}>
         {fontsLoaded ? <AppSlot /> : <AppLoader />}
       </NativeBaseProvider>
-      <StatusBar
-        animated
-        translucent
-        style="inverted"
-        backgroundColor="transparent"
-      />
     </>
   );
 }
