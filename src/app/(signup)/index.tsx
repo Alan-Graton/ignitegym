@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import { ImageURISource } from "react-native";
 
 import { Center, Text, Heading, VStack, Image, ScrollView } from "native-base";
 
@@ -17,6 +18,7 @@ export default function SignUp() {
       <VStack flex={1} bg="gray.700" px={10} pb={16}>
         <Image
           source={BackgroundImg}
+          defaultSource={BackgroundImg as ImageURISource}
           alt="Background Image"
           resizeMode="contain"
           position="absolute"
