@@ -12,7 +12,11 @@ export default function TabsLayout() {
     <Tabs
       initialRouteName="(home)"
       screenOptions={{
-        tabBarStyle: { height: 75, backgroundColor: THEME.colors.gray[600] },
+        tabBarStyle: {
+          height: 75,
+          backgroundColor: THEME.colors.gray[600],
+          borderColor: THEME.colors.gray[600],
+        },
         tabBarActiveTintColor: THEME.colors.green[500],
         tabBarInactiveTintColor: THEME.colors.gray[300],
       }}
