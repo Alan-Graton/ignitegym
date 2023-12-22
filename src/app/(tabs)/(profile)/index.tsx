@@ -19,7 +19,7 @@ const PIC_SIZE: number = 33;
 export default function Profile() {
   return (
     <VStack flex={1} bg="gray.700">
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
         <Center mt={6} px={10}>
           {/* <Skeleton
             w={PIC_SIZE}
@@ -42,9 +42,13 @@ export default function Profile() {
             isDisabled
             bg="gray.600"
           />
-        </Center>
-        <VStack px={10} mt={12} mb={9}>
-          <Heading color="gray.200" fontSize="md" mb={2}>
+          <Heading
+            color="gray.200"
+            fontSize="md"
+            mt={12}
+            mb={2}
+            alignSelf="flex-start"
+          >
             Alterar senha
           </Heading>
           <AppTextInput
@@ -63,7 +67,7 @@ export default function Profile() {
             bg="gray.600"
           />
           <AppButton title="Atualizar" mt={4} />
-        </VStack>
+        </Center>
       </ScrollView>
     </VStack>
   );
