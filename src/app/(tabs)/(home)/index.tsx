@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { router } from "expo-router";
 
 import { HStack, VStack, FlatList, Heading, Text } from "native-base";
 
@@ -19,6 +20,10 @@ export default function Home() {
     "Remada unilateral",
     "Levantamento terras",
   ]);
+
+  function handleOpenExerciseDetails() {
+    router.push("/(tabs)/(home)/(exercise_details)/");
+  }
 
   return (
     <VStack flex={1} bg="gray.700">
@@ -52,7 +57,9 @@ export default function Home() {
         <FlatList
           data={exercises}
           keyExtractor={(item) => item}
-          renderItem={({ item }) => <ExerciseCard title={item} />}
+          renderItem={({ item }) => (
+            <ExerciseCard title={item} onPress={handleOpenExerciseDetails} />
+          )}
           showsVerticalScrollIndicator={false}
           _contentContainerStyle={{ paddingBottom: 20 }}
         />
