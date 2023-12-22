@@ -28,7 +28,7 @@ export default function Home() {
         renderItem={({ item }) => (
           <Group
             name={item}
-            isActive={selectedGroup === item}
+            isActive={selectedGroup.toLowerCase() === item.toLowerCase()}
             onPress={() => setSelectedGroup((prevState) => (prevState = item))}
           />
         )}
