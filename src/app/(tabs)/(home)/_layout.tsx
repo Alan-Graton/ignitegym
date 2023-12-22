@@ -1,4 +1,4 @@
-import { Navigator, router, Slot, Stack, Tabs } from "expo-router";
+import { router, Slot, Tabs } from "expo-router";
 
 import { TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -6,7 +6,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { HStack, VStack, Text, Icon, Heading } from "native-base";
 
 import { AppUserPicture } from "@/components/AppUserPicture";
-import Home from ".";
 
 export default function HomeLayout() {
   function handleGoBack() {
@@ -50,7 +49,6 @@ export default function HomeLayout() {
           ),
         }}
       />
-      <Slot />
     </>
   );
 }
