@@ -19,15 +19,15 @@ export default function HomeLayout() {
           header: () => (
             <HStack
               bg="gray.600"
-              padding={3}
-              height={125}
+              padding={6}
+              height={117}
               alignItems="center"
               justifyContent="space-between"
               safeArea
             >
-              <AppUserPicture w={50} h={50} ml={2} />
+              <AppUserPicture w={50} h={50} />
 
-              <VStack flex={1} ml={4} padding={1}>
+              <VStack flex={1} ml={4}>
                 <Text color="gray.100" fontSize="md">
                   Olá,
                 </Text>
