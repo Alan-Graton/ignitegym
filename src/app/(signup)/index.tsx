@@ -45,7 +45,7 @@ export default function SignUp() {
           <AppButton
             title="Criar e acessar"
             onPress={() => {
-              router.push("/(tabs)/(home)");
+              router.push("/(tabs)/home");
             }}
           />
         </Center>

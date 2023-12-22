@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 
 import {
   House,
@@ -11,7 +11,7 @@ import { THEME } from "@/theme";
 export default function TabsLayout() {
   return (
     <Tabs
-      initialRouteName="(home)"
+      initialRouteName="home"
       screenOptions={{
         tabBarStyle: {
           height: 75,
@@ -23,7 +23,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="(home)"
+        name="home"
         options={{
           title: "",
           headerShown: false,
@@ -37,7 +37,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="(history)"
+        name="history"
         options={{
           title: "",
           headerShown: false,
@@ -51,7 +51,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="(profile)"
+        name="profile"
         options={{
           title: "",
           headerShown: false,

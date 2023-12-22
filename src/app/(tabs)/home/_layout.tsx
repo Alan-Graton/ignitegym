@@ -49,6 +49,7 @@ export default function HomeLayout() {
           ),
         }}
       />
+      <Slot />
     </>
   );
 }

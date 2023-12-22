@@ -22,7 +22,7 @@ export default function Home() {
   ]);
 
   function handleOpenExerciseDetails() {
-    router.push("/(tabs)/(home)/(exercise_details)/");
+    router.push("/(tabs)/home/exercise_details");
   }
 
   return (
