@@ -6,6 +6,7 @@ export function AppUserPicture({ ...rest }: IImageProps) {
   return (
     <Image
       source={{ uri: USER_PICTURE }}
+      defaultSource={{ uri: USER_PICTURE }}
       rounded="full"
       borderWidth={2}
       borderColor="gray.400"
