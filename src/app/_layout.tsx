@@ -1,4 +1,4 @@
-import { Slot, Stack, Tabs } from "expo-router";
+import { Slot } from "expo-router";
 
 import { StatusBar } from "expo-status-bar";
 
