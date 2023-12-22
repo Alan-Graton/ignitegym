@@ -1,4 +1,3 @@
-import { THEME } from "@/theme";
 import { Tabs } from "expo-router";
 
 import {
@@ -6,6 +5,8 @@ import {
   UserCircle,
   ClockCounterClockwise,
 } from "phosphor-react-native";
+
+import { THEME } from "@/theme";
 
 export default function TabsLayout() {
   return (
@@ -25,6 +26,7 @@ export default function TabsLayout() {
         name="(home)"
         options={{
           title: "",
+          headerShown: false,
           tabBarIcon: ({ size, color }) => (
             <House
               size={size}
@@ -38,6 +40,7 @@ export default function TabsLayout() {
         name="(history)"
         options={{
           title: "",
+          headerShown: false,
           tabBarIcon: ({ size, color }) => (
             <ClockCounterClockwise
               size={size}
@@ -51,6 +54,7 @@ export default function TabsLayout() {
         name="(profile)"
         options={{
           title: "",
+          headerShown: false,
           tabBarIcon: ({ size, color }) => (
             <UserCircle
               size={size}

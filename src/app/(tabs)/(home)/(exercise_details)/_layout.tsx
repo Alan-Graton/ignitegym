@@ -1,7 +1,5 @@
 import { Stack } from "expo-router";
 
-import { Header } from "./components/Header";
-
 export default function ExerciseDetailsLayout() {
-  return <Stack />;
+  return <Stack screenOptions={{ headerShown: false }} />;
 }

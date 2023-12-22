@@ -1,13 +1,11 @@
 import React from "react";
 
-import { router } from "expo-router";
-import { Box, Heading } from "native-base";
+import { Box, Center, Heading } from "native-base";
 
 export default function ExerciseDetails() {
-    
   return (
-    <Box>
+    <Center>
       <Heading>Exercise Details Screen</Heading>
-    </Box>
+    </Center>
   );
 }

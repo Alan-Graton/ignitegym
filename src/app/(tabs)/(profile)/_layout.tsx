@@ -6,6 +6,7 @@ export default function ProfileLayout() {
     <>
       <Tabs.Screen
         options={{
+          headerShown: true,
           header: () => <AppSimpleScreenHeader title="Perfil" />,
         }}
       />

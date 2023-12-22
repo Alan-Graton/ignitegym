@@ -6,6 +6,7 @@ export default function HistoryLayout() {
     <>
       <Tabs.Screen
         options={{
+          headerShown: true,
           header: () => (
             <AppSimpleScreenHeader title="Histórico de Exercícios" />
           ),
