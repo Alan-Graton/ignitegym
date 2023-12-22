@@ -34,6 +34,7 @@ export default function HistoryProfile() {
               Vamos fazer exercícios hoje?
             </Text>
           )}
+          showsVerticalScrollIndicator={false}
         />
       </VStack>
     </>
