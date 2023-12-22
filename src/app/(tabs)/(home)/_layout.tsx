@@ -1,11 +1,11 @@
 import { router, Slot, Tabs } from "expo-router";
 
 import { TouchableOpacity } from "react-native";
-import { Box, HStack, VStack, Text } from "native-base";
+import { MaterialIcons } from "@expo/vector-icons";
+
+import { HStack, VStack, Text, Icon, Heading } from "native-base";
 
 import { AppUserPicture } from "@/components/AppUserPicture";
-
-import { SignOut } from "phosphor-react-native";
 
 export default function HomeLayout() {
   function handleGoBack() {
@@ -28,19 +28,22 @@ export default function HomeLayout() {
               <AppUserPicture w={50} h={50} ml={2} />
 
               <VStack flex={1} ml={4} padding={1}>
-                <Text color="gray.100" fontSize="sm">
+                <Text color="gray.100" fontSize="md">
                   Olá,
                 </Text>
-                <Text color="gray.100" fontSize="md" fontFamily="heading">
+                <Heading color="gray.100" fontSize="md">
                   Alan Graton
-                </Text>
+                </Heading>
               </VStack>
 
-              <Box mr={2}>
-                <TouchableOpacity onPress={handleGoBack}>
-                  <SignOut color="white" />
-                </TouchableOpacity>
-              </Box>
+              <TouchableOpacity onPress={handleGoBack}>
+                <Icon
+                  as={MaterialIcons}
+                  name="logout"
+                  color="gray.200"
+                  size={6}
+                />
+              </TouchableOpacity>
             </HStack>
           ),
         }}
