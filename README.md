@@ -8,5 +8,6 @@ Projeto do módulo de **Components APIs**
 
 - React Native
 - Expo 49
+- Expo-Router V2
 - Typescript
 - Native Base
