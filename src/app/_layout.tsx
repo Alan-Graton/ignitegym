@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 
 import { StatusBar } from "expo-status-bar";
 
@@ -30,9 +30,7 @@ export default function RootLayout() {
     return (
       <Box flex={1} bg="gray.700">
         <ExerciseProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" />
-          </Stack>
+          <Slot />
         </ExerciseProvider>
         <StatusBar
           animated
