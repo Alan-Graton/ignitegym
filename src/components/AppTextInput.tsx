@@ -22,6 +22,13 @@ export function AppTextInput({
         fontFamily="body"
         color="white"
         placeholderTextColor="gray.300"
+        isInvalid={invalid}
+        cursorColor="#00B37E"
+        _invalid={{
+          borderWidth: 1,
+          borderColor: "red.700",
+          cursorColor: "#F75A68",
+        }}
         _focus={{
           bg: "gray.700",
           borderWidth: 1,
