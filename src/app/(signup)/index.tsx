@@ -6,10 +6,26 @@ import { Center, Text, Heading, VStack, Image, ScrollView } from "native-base";
 import { AppTextInput } from "@/components/AppTextInput";
 import { AppButton } from "@/components/AppButton";
 
+import { useForm, Controller } from "react-hook-form";
+import { signUpSchema } from "@/schemas/singup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import LogoSvg from "@/assets/logo.svg";
 import BackgroundImg from "@/assets/background.png";
 
 export default function SignUp() {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(signUpSchema),
+  });
+
+  function onSubmit(data: { name: string; email: string; password: string }) {
+    console.log("Signup Form Data: ", data);
+  }
+
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
@@ -34,20 +50,52 @@ export default function SignUp() {
           <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
             Crie sua conta
           </Heading>
-          <AppTextInput placeholder="Nome" />
-          <AppTextInput
-            placeholder="E-mail"
-            keyboardType="email-address"
-            autoCapitalize="none"
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="Nome"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="name"
           />
-          <AppTextInput placeholder="Senha" secureTextEntry />
 
-          <AppButton
-            title="Criar e acessar"
-            onPress={() => {
-              router.push("/(tabs)/home");
-            }}
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="E-mail"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="email"
           />
+
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="Senha"
+                secureTextEntry
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="password"
+          />
+
+          <AppButton title="Criar e acessar" onPress={handleSubmit(onSubmit)} />
         </Center>
 
         <AppButton

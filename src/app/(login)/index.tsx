@@ -6,10 +6,26 @@ import { Center, Text, Heading, VStack, Image, ScrollView } from "native-base";
 import { AppTextInput } from "@/components/AppTextInput";
 import { AppButton } from "@/components/AppButton";
 
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema } from "@/schemas/login";
+
 import LogoSvg from "@/assets/logo.svg";
 import BackgroundImg from "@/assets/background.png";
 
 export default function Login() {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  });
+
+  function onSubmit(data: { email: string; password: string }) {
+    console.log("Login Form Data", data);
+  }
+
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
@@ -34,19 +50,39 @@ export default function Login() {
           <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
             Acesse sua conta
           </Heading>
-          <AppTextInput
-            placeholder="E-mail"
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <AppTextInput placeholder="Senha" secureTextEntry />
 
-          <AppButton
-            title="Acessar"
-            onPress={() => {
-              router.push("/(tabs)/home");
-            }}
+          <Controller
+            control={control}
+            name="email"
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="E-mail"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
           />
+
+          <Controller
+            control={control}
+            name="password"
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="Senha"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                secureTextEntry
+              />
+            )}
+          />
+
+          <AppButton title="Acessar" onPress={handleSubmit(onSubmit)} />
         </Center>
 
         <Center mt={24}>
