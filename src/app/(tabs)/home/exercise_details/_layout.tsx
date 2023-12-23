@@ -17,7 +17,7 @@ export default function ExerciseDetailsLayout() {
       screenOptions={{
         headerShown: true,
         header: () => (
-          <VStack pt={5} bg="gray.600" safeArea>
+          <VStack pt={5} pb={5} height={117} bg="gray.600" safeArea>
             <VStack bg="gray.600" px={8}>
               <TouchableOpacity onPress={handleGoBack}>
                 <Icon
