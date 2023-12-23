@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ExerciseContext } from "@/contexts/ExerciseContext";
 
 import { router, Slot, Tabs } from "expo-router";
@@ -9,10 +9,16 @@ import { HStack, VStack, Text, Icon, Heading } from "native-base";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { AppUserPicture } from "@/components/AppUserPicture";
+import { UserContext } from "@/contexts/UserContext";
+import { STATIC_USER_PICTURE } from "@/constants";
 
 export default function HomeLayout() {
-  const { selectedExercise, setSelectedExercise } =
-    React.useContext(ExerciseContext);
+  const { selectedExercise, setSelectedExercise } = useContext(ExerciseContext);
+
+  const { user } = useContext(UserContext);
+
+  // TODO: Apply D.R.Y
+  const handleUserPicture = user.picture ? user.picture : STATIC_USER_PICTURE;
 
   function handleGoBack() {
     if (router.canGoBack()) {
@@ -35,7 +41,11 @@ export default function HomeLayout() {
               justifyContent="space-between"
               safeArea
             >
-              <AppUserPicture w={50} h={50} />
+              <AppUserPicture
+                source={{ uri: handleUserPicture }}
+                w={50}
+                h={50}
+              />
 
               <VStack flex={1} ml={4}>
                 <Text color="gray.100" fontSize="md">

@@ -2,6 +2,7 @@ import { Slot } from "expo-router";
 
 import { StatusBar } from "expo-status-bar";
 
+import { UserProvider } from "@/contexts/UserContext";
 import { ExerciseProvider } from "@/contexts/ExerciseContext";
 
 import { NativeBaseProvider, Box, Center } from "native-base";
@@ -29,9 +30,11 @@ export default function RootLayout() {
   const AppContent = () => {
     return (
       <Box flex={1} bg="gray.700">
-        <ExerciseProvider>
-          <Slot />
-        </ExerciseProvider>
+        <UserProvider>
+          <ExerciseProvider>
+            <Slot />
+          </ExerciseProvider>
+        </UserProvider>
         <StatusBar
           animated
           translucent
