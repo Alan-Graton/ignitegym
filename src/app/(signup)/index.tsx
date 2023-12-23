@@ -19,6 +19,7 @@ interface ISignupForm {
   name: string;
   email: string;
   password: string;
+  password_confirm: string;
   picture?: string;
 }
 
@@ -34,6 +35,7 @@ export default function SignUp() {
       name: "",
       email: "",
       password: "",
+      password_confirm: "",
       picture: STATIC_USER_PICTURE,
     },
   });
@@ -106,9 +108,24 @@ export default function SignUp() {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
+                errorMessage={errors.password?.message}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="password_confirm"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="Confirme a Senha"
+                secureTextEntry
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
                 onSubmitEditing={handleSubmit(onSubmit)}
                 returnKeyType="send"
-                errorMessage={errors.password?.message}
+                errorMessage={errors.password_confirm?.message}
               />
             )}
           />
