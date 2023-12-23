@@ -110,6 +110,7 @@ export default function Profile() {
           <Heading
             color="gray.200"
             fontSize="md"
+            fontFamily="heading"
             mt={12}
             mb={2}
             alignSelf="flex-start"

@@ -38,7 +38,12 @@ export default function ExerciseDetailsLayout() {
               alignItems="center"
             >
               <HStack>
-                <Heading color="gray.100" fontSize="lg" flexShrink={1}>
+                <Heading
+                  color="gray.100"
+                  fontSize="lg"
+                  fontFamily="heading"
+                  flexShrink={1}
+                >
                   {selectedExercise}
                 </Heading>
               </HStack>
