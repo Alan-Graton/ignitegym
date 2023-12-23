@@ -2,7 +2,6 @@ import React from "react";
 import { UserContext } from "@/contexts/UserContext";
 
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
 
 import { TouchableOpacity } from "react-native";
 import {
@@ -12,6 +11,7 @@ import {
   Text,
   ScrollView,
   Skeleton,
+  useToast,
 } from "native-base";
 
 import { AppUserPicture } from "@/components/AppUserPicture";
@@ -19,12 +19,15 @@ import { AppTextInput } from "@/components/AppTextInput";
 import { AppButton } from "@/components/AppButton";
 
 import { STATIC_USER_PICTURE } from "@/constants";
+import { Alert } from "react-native";
 const PIC_SIZE: number = 33;
 
 export default function Profile() {
   const { user, setUser } = React.useContext(UserContext);
 
   const [isPicLoading, setIsPicLoading] = React.useState<boolean>(false);
+
+  const toast = useToast();
 
   // TODO: Apply D.R.Y
   const handleUserPicture = user.picture ? user.picture : STATIC_USER_PICTURE;
@@ -43,7 +46,16 @@ export default function Profile() {
       if (response.canceled) return;
 
       if (response.assets[0].uri) {
-        const picInfo = await FileSystem.getInfoAsync(response.assets[0].uri);
+        if (
+          response.assets[0].fileSize &&
+          (response.assets[0].fileSize / 1024 / 1024 > 5)
+        ) {
+          return toast.show({
+            title: "Essa imagem é muito grande. Escolha uma de até 5MB.",
+            placement: "top",
+            bg: 'red.500'
+          });
+        }
 
         setUser((prevState) => ({
           ...prevState,
