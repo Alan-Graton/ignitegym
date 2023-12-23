@@ -44,7 +44,7 @@ export default function Login() {
           <AppButton
             title="Acessar"
             onPress={() => {
-              router.push("/(tabs)/(home)");
+              router.push("/(tabs)/home");
             }}
           />
         </Center>

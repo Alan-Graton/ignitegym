@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { ExerciseContext } from "@/contexts/ExerciseContext";
+
 import { router } from "expo-router";
 
 import { HStack, VStack, FlatList, Heading, Text } from "native-base";
@@ -7,6 +9,8 @@ import { Group } from "./components/Group";
 import { ExerciseCard } from "./components/ExerciseCard";
 
 export default function Home() {
+  const { setSelectedExercise } = React.useContext(ExerciseContext);
+
   const [groups, setGroups] = useState<string[]>([
     "costas",
     "bíceps",
@@ -21,8 +25,9 @@ export default function Home() {
     "Levantamento terras",
   ]);
 
-  function handleOpenExerciseDetails() {
-    router.push("/(tabs)/(home)/(exercise_details)/");
+  function handleOpenExerciseDetails(item: string) {
+    setSelectedExercise((prevState) => (prevState = item));
+    router.push("/(tabs)/home/exercise_details");
   }
 
   return (
@@ -42,6 +47,7 @@ export default function Home() {
         _contentContainerStyle={{ px: 8 }}
         my={10}
         maxH={10}
+        minH={10}
       />
 
       <VStack flex={1} px={8}>
@@ -58,7 +64,10 @@ export default function Home() {
           data={exercises}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
-            <ExerciseCard title={item} onPress={handleOpenExerciseDetails} />
+            <ExerciseCard
+              title={item}
+              onPress={() => handleOpenExerciseDetails(item)}
+            />
           )}
           showsVerticalScrollIndicator={false}
           _contentContainerStyle={{ paddingBottom: 20 }}
