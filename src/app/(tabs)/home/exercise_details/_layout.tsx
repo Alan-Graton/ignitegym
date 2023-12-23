@@ -17,15 +17,15 @@ export default function ExerciseDetailsLayout() {
       screenOptions={{
         headerShown: true,
         header: () => (
-          <VStack bg="gray.600" px={8} pt={5} safeArea>
+          <VStack bg="gray.600" px={8} pt={6} safeArea>
             <TouchableOpacity onPress={handleGoBack}>
               <Icon as={Feather} name="arrow-left" color="green.500" size={6} />
             </TouchableOpacity>
 
             <HStack
               justifyContent="space-between"
-              mt={3.5}
-              mb={3.5}
+              mt={4}
+              mb={8}
               alignItems="center"
             >
               <HStack>
