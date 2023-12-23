@@ -5,6 +5,7 @@ import { Center, Text, Heading, VStack, Image, ScrollView } from "native-base";
 
 import { AppTextInput } from "@/components/AppTextInput";
 import { AppButton } from "@/components/AppButton";
+import { AppTextError } from "@/components/AppTextError";
 
 import { useForm, Controller } from "react-hook-form";
 import { signUpSchema } from "@/schemas/singup";
@@ -13,16 +14,32 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import LogoSvg from "@/assets/logo.svg";
 import BackgroundImg from "@/assets/background.png";
 
+import { STATIC_USER_PICTURE } from "@/constants";
+
+interface ISignupForm {
+  name: string;
+  email: string;
+  password: string;
+  picture?: string;
+}
+
 export default function SignUp() {
+  // TODO: Move this inside a Context (UserContext)
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<ISignupForm>({
     resolver: yupResolver(signUpSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      picture: STATIC_USER_PICTURE,
+    },
   });
 
-  function onSubmit(data: { name: string; email: string; password: string }) {
+  function onSubmit(data: ISignupForm) {
     console.log("Signup Form Data: ", data);
   }
 
@@ -52,7 +69,6 @@ export default function SignUp() {
           </Heading>
           <Controller
             control={control}
-            rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
                 placeholder="Nome"
@@ -64,9 +80,10 @@ export default function SignUp() {
             name="name"
           />
 
+          <AppTextError error={errors.name} message={errors.name?.message} />
+
           <Controller
             control={control}
-            rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
                 placeholder="E-mail"
@@ -80,9 +97,10 @@ export default function SignUp() {
             name="email"
           />
 
+          <AppTextError error={errors.email} message={errors.email?.message} />
+
           <Controller
             control={control}
-            rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
                 placeholder="Senha"
@@ -90,9 +108,16 @@ export default function SignUp() {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
+                onSubmitEditing={handleSubmit(onSubmit)}
+                returnKeyType="send"
               />
             )}
             name="password"
+          />
+
+          <AppTextError
+            error={errors.password}
+            message={errors.password?.message}
           />
 
           <AppButton title="Criar e acessar" onPress={handleSubmit(onSubmit)} />

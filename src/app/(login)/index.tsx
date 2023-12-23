@@ -12,17 +12,27 @@ import { loginSchema } from "@/schemas/login";
 
 import LogoSvg from "@/assets/logo.svg";
 import BackgroundImg from "@/assets/background.png";
+import { AppTextError } from "@/components/AppTextError";
+
+interface ILoginForm {
+  email: string;
+  password: string;
+}
 
 export default function Login() {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<ILoginForm>({
     resolver: yupResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
-  function onSubmit(data: { email: string; password: string }) {
+  function onSubmit(data: ILoginForm) {
     console.log("Login Form Data", data);
   }
 
@@ -67,6 +77,8 @@ export default function Login() {
             )}
           />
 
+          <AppTextError error={errors.email} message={errors.email?.message} />
+
           <Controller
             control={control}
             name="password"
@@ -78,8 +90,15 @@ export default function Login() {
                 onChangeText={onChange}
                 value={value}
                 secureTextEntry
+                onSubmitEditing={handleSubmit(onSubmit)}
+                returnKeyType="send"
               />
             )}
+          />
+
+          <AppTextError
+            error={errors.password}
+            message={errors.password?.message}
           />
 
           <AppButton title="Acessar" onPress={handleSubmit(onSubmit)} />
