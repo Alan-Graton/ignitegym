@@ -7,7 +7,7 @@ export const signUpSchema = yup
       .string()
       .trim()
       .required("E-mail é obrigatório")
-      .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, "E-mail inválido"),
+      .email("E-mail inválido"),
     password: yup.string().required("Senha é obrigatória"),
     picture: yup.string(),
   })
