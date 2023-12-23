@@ -1,7 +1,7 @@
 import { router, Stack } from "expo-router";
 
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, Icon, Text, VStack } from "native-base";
+import { Heading, HStack, Icon, Text, VStack } from "native-base";
 
 import { Feather } from "@expo/vector-icons";
 import BodySvg from "@/assets/body.svg";
@@ -18,7 +18,7 @@ export default function ExerciseDetailsLayout() {
         headerShown: true,
         header: () => (
           <VStack bg="gray.600" px={8} pt={5} safeArea>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleGoBack}>
               <Icon as={Feather} name="arrow-left" color="green.500" size={6} />
             </TouchableOpacity>
 
