@@ -12,7 +12,6 @@ import { loginSchema } from "@/schemas/login";
 
 import LogoSvg from "@/assets/logo.svg";
 import BackgroundImg from "@/assets/background.png";
-import { AppTextError } from "@/components/AppTextError";
 
 interface ILoginForm {
   email: string;
@@ -64,7 +63,6 @@ export default function Login() {
           <Controller
             control={control}
             name="email"
-            rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
                 placeholder="E-mail"
@@ -73,16 +71,14 @@ export default function Login() {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                errorMessage={errors.email?.message}
               />
             )}
           />
 
-          <AppTextError error={errors.email} message={errors.email?.message} />
-
           <Controller
             control={control}
             name="password"
-            rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
                 placeholder="Senha"
@@ -92,13 +88,9 @@ export default function Login() {
                 secureTextEntry
                 onSubmitEditing={handleSubmit(onSubmit)}
                 returnKeyType="send"
+                errorMessage={errors.password?.message}
               />
             )}
-          />
-
-          <AppTextError
-            error={errors.password}
-            message={errors.password?.message}
           />
 
           <AppButton title="Acessar" onPress={handleSubmit(onSubmit)} />
