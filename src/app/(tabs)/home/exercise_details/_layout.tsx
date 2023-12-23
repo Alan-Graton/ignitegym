@@ -1,3 +1,6 @@
+import React from "react";
+import { ExerciseContext } from "@/contexts/ExerciseContext";
+
 import { router, Stack } from "expo-router";
 
 import { TouchableOpacity } from "react-native";
@@ -7,8 +10,14 @@ import { Feather } from "@expo/vector-icons";
 import BodySvg from "@/assets/body.svg";
 
 export default function ExerciseDetailsLayout() {
+  const { selectedExercise, setSelectedExercise } =
+    React.useContext(ExerciseContext);
+
   function handleGoBack() {
-    router.canGoBack() && router.back();
+    if (router.canGoBack()) {
+      setSelectedExercise(null);
+      router.back();
+    }
   }
 
   return (
@@ -30,7 +39,7 @@ export default function ExerciseDetailsLayout() {
             >
               <HStack>
                 <Heading color="gray.100" fontSize="lg" flexShrink={1}>
-                  Puxada frontal
+                  {selectedExercise}
                 </Heading>
               </HStack>
 

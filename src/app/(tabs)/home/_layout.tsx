@@ -1,22 +1,31 @@
+import React from "react";
+import { ExerciseContext } from "@/contexts/ExerciseContext";
+
 import { router, Slot, Tabs } from "expo-router";
 
 import { TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 
 import { HStack, VStack, Text, Icon, Heading } from "native-base";
 
+import { MaterialIcons } from "@expo/vector-icons";
 import { AppUserPicture } from "@/components/AppUserPicture";
 
 export default function HomeLayout() {
+  const { selectedExercise, setSelectedExercise } =
+    React.useContext(ExerciseContext);
+
   function handleGoBack() {
-    router.canGoBack() && router.back();
+    if (router.canGoBack()) {
+      setSelectedExercise(null);
+      router.back();
+    }
   }
 
   return (
     <>
       <Tabs.Screen
         options={{
-          headerShown: true,
+          headerShown: selectedExercise ? false : true,
           header: () => (
             <HStack
               bg="gray.600"
