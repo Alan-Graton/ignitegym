@@ -1,9 +1,10 @@
 import { router, Stack } from "expo-router";
-import { Feather } from "@expo/vector-icons";
-
-import { Fab, Heading, HStack, Icon, Text, VStack } from "native-base";
 
 import { TouchableOpacity } from "react-native";
+import { Heading, HStack, Icon, Text, VStack } from "native-base";
+
+import { Feather } from "@expo/vector-icons";
+import BodySvg from "@/assets/body.svg";
 
 export default function ExerciseDetailsLayout() {
   function handleGoBack() {
@@ -33,11 +34,12 @@ export default function ExerciseDetailsLayout() {
                 mb={8}
                 alignItems="center"
               >
-                <Heading color="gray.100" fontSize="lg">
+                <Heading color="gray.100" fontSize="lg" flexShrink={1}>
                   Puxada frontal
                 </Heading>
 
-                <HStack>
+                <HStack alignItems="center">
+                  <BodySvg />
                   <Text color="gray.200" ml={1} textTransform="capitalize">
                     Costas
                   </Text>
