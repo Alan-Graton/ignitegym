@@ -1,10 +1,23 @@
+import React from "react";
 import { router } from "expo-router";
 import { ImageURISource } from "react-native";
 
-import { Center, Text, Heading, VStack, Image, ScrollView } from "native-base";
+import { api } from "@/services/api";
+
+import {
+  Center,
+  Text,
+  Heading,
+  VStack,
+  Image,
+  ScrollView,
+  useToast,
+} from "native-base";
 
 import { AppTextInput } from "@/components/AppTextInput";
 import { AppButton } from "@/components/AppButton";
+
+import { AppError } from "@/utils/AppError";
 
 import { useForm, Controller } from "react-hook-form";
 import { signUpSchema } from "@/schemas/singup";
@@ -24,7 +37,6 @@ interface ISignupForm {
 }
 
 export default function SignUp() {
-  // TODO: Move this inside a Context (UserContext)
   const {
     control,
     handleSubmit,
@@ -40,8 +52,27 @@ export default function SignUp() {
     },
   });
 
-  function onSubmit(data: ISignupForm) {
-    console.log("Signup Form Data: ", data);
+  const toast = useToast();
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  async function onSubmit({ name, email, password }: ISignupForm) {
+    console.log("\n\n[Signup] Creating account...");
+    try {
+      setLoading(true);
+
+      const result = await api.post("users", { name, email, password });
+
+      console.log("\n\nAxios Result: ", result.data);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível criar conta. Tente novamente mais tarde";
+
+      toast.show({ title, placement: "top", bgColor: "red.500" });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -130,7 +161,11 @@ export default function SignUp() {
             )}
           />
 
-          <AppButton title="Criar e acessar" onPress={handleSubmit(onSubmit)} />
+          <AppButton
+            title="Criar e acessar"
+            onPress={handleSubmit(onSubmit)}
+            isLoading={loading}
+          />
         </Center>
 
         <AppButton
