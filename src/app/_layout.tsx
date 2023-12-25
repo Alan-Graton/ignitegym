@@ -1,12 +1,13 @@
-import { Slot } from "expo-router";
-
+import React from "react";
+import { router, Slot } from "expo-router";
+import { NativeBaseProvider, Box, Center } from "native-base";
 import { StatusBar } from "expo-status-bar";
 
 import { AuthProvider } from "@/contexts/AuthContext";
 import { UserProvider } from "@/contexts/UserContext";
 import { ExerciseProvider } from "@/contexts/ExerciseContext";
 
-import { NativeBaseProvider, Box, Center } from "native-base";
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 import { AppLoader } from "@/components/AppLoader";
 
@@ -28,7 +29,16 @@ export default function RootLayout() {
     );
   };
 
+  // TODO: Test this
   const AppContent = () => {
+    const { user } = useAuthContext();
+
+    console.log("\n\n[Root Layout - AppContent] User: ", user);
+
+    React.useEffect(() => {
+      router.push(user.id ? "/home/" : "/(login)");
+    }, [user]);
+
     return (
       <Box flex={1} bg="gray.700">
         <Slot />
