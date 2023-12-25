@@ -1,10 +1,23 @@
+import React from "react";
 import { router } from "expo-router";
 import { ImageURISource } from "react-native";
 
-import { Center, Text, Heading, VStack, Image, ScrollView } from "native-base";
+import {
+  Center,
+  Text,
+  Heading,
+  VStack,
+  Image,
+  ScrollView,
+  useToast,
+} from "native-base";
+
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 import { AppTextInput } from "@/components/AppTextInput";
 import { AppButton } from "@/components/AppButton";
+
+import { AppError } from "@/utils/AppError";
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,6 +32,12 @@ interface ILoginForm {
 }
 
 export default function Login() {
+  const { signIn } = useAuthContext();
+
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const toast = useToast();
+
   const {
     control,
     handleSubmit,
@@ -31,8 +50,23 @@ export default function Login() {
     },
   });
 
-  function onSubmit(data: ILoginForm) {
-    console.log("Login Form Data", data);
+  async function onSubmit({ email, password }: ILoginForm) {
+    try {
+      setLoading(true);
+      await signIn(email, password);
+
+      router.push("/home/");
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : "Não foi possível entrar. Tente novamente mais tarde.";
+
+      toast.show({ title, placement: "top", bgColor: "red.500" });
+
+      setLoading(false);
+    }
   }
 
   return (
@@ -93,7 +127,11 @@ export default function Login() {
             )}
           />
 
-          <AppButton title="Acessar" onPress={handleSubmit(onSubmit)} />
+          <AppButton
+            title="Acessar"
+            onPress={handleSubmit(onSubmit)}
+            isLoading={loading}
+          />
         </Center>
 
         <Center mt={24}>
