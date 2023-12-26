@@ -1,24 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
+import { useFocusEffect } from "expo-router";
 
-import { VStack, Heading, SectionList, Text } from "native-base";
+import { VStack, Heading, SectionList, Text, useToast } from "native-base";
+
+import { api } from "@/services/api";
+import { HistoryByDay } from "@/dtos/HistoryByDayDTO";
+
+import { AppLoader } from "@/components/AppLoader";
 
 import { HistoryCard } from "./components/HistoryCard";
 
+import { AppError } from "@/utils/AppError";
+
 export default function HistoryProfile() {
-  const [exercises, setExercises] = React.useState<
-    { title: string; data: any[] }[]
-  >([
-    { title: "22.08.22", data: ["Puxada Frontal", "Remada unilateral"] },
-    { title: "27.08.22", data: ["Puxada frontal"] },
-  ]);
+  const toast = useToast();
+
+  const [loading, setLoading] = useState(true);
+  const [history, setHistory] = useState<HistoryByDay[]>([]);
+
+  async function fetchHistory() {
+    try {
+      setLoading(true);
+
+      const { data } = await api.get("history");
+
+      setHistory(data);
+    } catch (error) {
+      console.error("\n\n[Home] fetchGroups FAILED: ", error);
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : "Não foi possível carregar o histórico.";
+
+      toast.show({ title, placement: "top", bgColor: "red.500" });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchHistory();
+    }, [])
+  );
 
   return (
     <>
       <VStack flex={1} bg="gray.700">
         <SectionList
-          sections={exercises}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => <HistoryCard />}
+          sections={history}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <HistoryCard register={item} />}
           renderSectionHeader={({ section }) => (
             <Heading
               color="gray.200"
@@ -32,13 +65,18 @@ export default function HistoryProfile() {
           )}
           px={8}
           contentContainerStyle={
-            exercises.length === 0 && { flex: 1, justifyContent: "center" }
+            history.length === 0 && { flex: 1, justifyContent: "center" }
           }
           ListEmptyComponent={() => (
-            <Text color="gray.100" textAlign="center">
-              Não há exercícios registrados ainda. {"\n"}
-              Vamos fazer exercícios hoje?
-            </Text>
+            <>
+              <AppLoader loading={loading} size="lg" />
+              {!loading && (
+                <Text color="gray.100" textAlign="center">
+                  Não há exercícios registrados ainda. {"\n"}
+                  Vamos fazer exercícios hoje?
+                </Text>
+              )}
+            </>
           )}
           showsVerticalScrollIndicator={false}
         />
