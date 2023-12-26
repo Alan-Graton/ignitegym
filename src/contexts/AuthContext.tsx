@@ -46,9 +46,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signOut(): Promise<void> {
     try {
+      setIsFetchingUserData(true);
+      setUser({} as UserDTO);
+
       await storageUserRemove();
     } catch (error) {
       console.error("\n\n[AuthContext] SignOut Error: ", error);
+      throw error;
+    } finally {
+      setIsFetchingUserData(false);
     }
   }
 

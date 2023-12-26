@@ -6,8 +6,6 @@ import { router } from "expo-router";
 import { HStack, Heading, Icon, VStack, Text } from "native-base";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { storageUserRemove } from "@/storage/storageUser";
-
 import { AppUserPicture } from "@/components/AppUserPicture";
 
 import { MaterialIcons } from "@expo/vector-icons";
@@ -15,17 +13,16 @@ import { MaterialIcons } from "@expo/vector-icons";
 import defaultPicture from "@/assets/userPhotoDefault.png";
 
 export function Header() {
-  const { user } = useAuthContext();
+  const { user, signOut } = useAuthContext();
   const { setSelectedExercise } = React.useContext(ExerciseContext);
 
-  async function handleGoBack() {
+  async function handleSignOut() {
     try {
-      await storageUserRemove();
+      await signOut();
 
-      if (router.canGoBack()) {
-        setSelectedExercise(null);
-        router.back();
-      }
+      setSelectedExercise(null);
+
+      router.canGoBack() ? router.back() : router.push("/(login)");
     } catch (error) {
       console.error("\n\n[Home] Signing Out Error: ", error);
     }
@@ -55,7 +52,7 @@ export function Header() {
         </Heading>
       </VStack>
 
-      <TouchableOpacity onPress={handleGoBack}>
+      <TouchableOpacity onPress={handleSignOut}>
         <Icon as={MaterialIcons} name="logout" color="gray.200" size={6} />
       </TouchableOpacity>
     </HStack>
