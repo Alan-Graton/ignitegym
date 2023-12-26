@@ -1,4 +1,6 @@
 import React from "react";
+import { useAuthContext } from "@/hooks/useAuthContext";
+
 import { router } from "expo-router";
 import { ImageURISource } from "react-native";
 
@@ -53,6 +55,8 @@ export default function SignUp() {
   });
 
   const toast = useToast();
+
+  const { signIn } = useAuthContext();
   const [loading, setLoading] = React.useState<boolean>(false);
 
   async function onSubmit({ name, email, password }: ISignupForm) {
@@ -60,9 +64,11 @@ export default function SignUp() {
     try {
       setLoading(true);
 
-      const result = await api.post("users", { name, email, password });
+      await api.post("users", { name, email, password });
 
-      console.log("\n\nAxios Result: ", result.data);
+      await signIn(email, password);
+
+      router.push("/home/");
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
