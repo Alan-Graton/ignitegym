@@ -3,13 +3,17 @@ import { ExerciseContext } from "@/contexts/ExerciseContext";
 
 import { router, Slot, Tabs } from "expo-router";
 
-import { TouchableOpacity } from "react-native";
+import { UserContext } from "@/contexts/UserContext";
 
+import { TouchableOpacity } from "react-native";
 import { HStack, VStack, Text, Icon, Heading } from "native-base";
 
-import { MaterialIcons } from "@expo/vector-icons";
+import { storageUserRemove } from "@/storage/storageUser";
+
 import { AppUserPicture } from "@/components/AppUserPicture";
-import { UserContext } from "@/contexts/UserContext";
+
+import { MaterialIcons } from "@expo/vector-icons";
+
 import { STATIC_USER_PICTURE } from "@/constants";
 
 export default function HomeLayout() {
@@ -20,10 +24,16 @@ export default function HomeLayout() {
   // TODO: Apply D.R.Y
   const handleUserPicture = user.picture ? user.picture : STATIC_USER_PICTURE;
 
-  function handleGoBack() {
-    if (router.canGoBack()) {
-      setSelectedExercise(null);
-      router.back();
+  async function handleGoBack() {
+    try {
+      await storageUserRemove();
+
+      if (router.canGoBack()) {
+        setSelectedExercise(null);
+        router.back();
+      }
+    } catch (error) {
+      console.error("\n\n[Home] Signing Out Error: ", error);
     }
   }
 
