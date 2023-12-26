@@ -1,5 +1,5 @@
 import React from "react";
-import { ExerciseContext } from "@/contexts/ExerciseContext";
+import { useExerciseContext } from "@/hooks/useExerciseContext";
 
 import { router, Stack } from "expo-router";
 
@@ -10,12 +10,16 @@ import { Feather } from "@expo/vector-icons";
 import BodySvg from "@/assets/body.svg";
 
 export default function ExerciseDetailsLayout() {
-  const { selectedExercise, setSelectedExercise } =
-    React.useContext(ExerciseContext);
+  const {
+    selectedExerciseDetails,
+    setSelectedExerciseDetails,
+    setSelectedExerciseID,
+  } = useExerciseContext();
 
   function handleGoBack() {
     if (router.canGoBack()) {
-      setSelectedExercise(null);
+      setSelectedExerciseID(null);
+      setSelectedExerciseDetails(null);
       router.back();
     }
   }
@@ -44,14 +48,14 @@ export default function ExerciseDetailsLayout() {
                   fontFamily="heading"
                   flexShrink={1}
                 >
-                  {selectedExercise}
+                  {selectedExerciseDetails?.name}
                 </Heading>
               </HStack>
 
               <HStack alignItems="center">
                 <BodySvg />
                 <Text color="gray.200" ml={1} textTransform="capitalize">
-                  Costas
+                  {selectedExerciseDetails?.group}
                 </Text>
               </HStack>
             </HStack>

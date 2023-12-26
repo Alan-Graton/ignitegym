@@ -1,18 +1,18 @@
-import React, { useContext } from "react";
-import { ExerciseContext } from "@/contexts/ExerciseContext";
+import React from "react";
+import { useExerciseContext } from "@/hooks/useExerciseContext";
 
 import { Slot, Tabs } from "expo-router";
 
 import { Header } from "./components/Header";
 
 export default function HomeLayout() {
-  const { selectedExercise } = useContext(ExerciseContext);
+  const { selectedExerciseID } = useExerciseContext();
 
   return (
     <>
       <Tabs.Screen
         options={{
-          headerShown: selectedExercise ? false : true,
+          headerShown: selectedExerciseID ? false : true,
           header: () => <Header />,
         }}
       />

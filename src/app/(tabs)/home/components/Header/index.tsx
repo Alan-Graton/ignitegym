@@ -1,6 +1,6 @@
 import React from "react";
-import { ExerciseContext } from "@/contexts/ExerciseContext";
 import { useAuthContext } from "@/hooks/useAuthContext";
+import { useExerciseContext } from "@/hooks/useExerciseContext";
 import { router } from "expo-router";
 
 import { HStack, Heading, Icon, VStack, Text } from "native-base";
@@ -14,13 +14,15 @@ import defaultPicture from "@/assets/userPhotoDefault.png";
 
 export function Header() {
   const { user, signOut } = useAuthContext();
-  const { setSelectedExercise } = React.useContext(ExerciseContext);
+  const { setSelectedExerciseID, setSelectedExerciseDetails } =
+    useExerciseContext();
 
   async function handleSignOut() {
     try {
       await signOut();
 
-      setSelectedExercise(null);
+      setSelectedExerciseID(null);
+      setSelectedExerciseDetails(null);
 
       router.canGoBack() ? router.back() : router.push("/(login)");
     } catch (error) {

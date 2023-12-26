@@ -1,29 +1,38 @@
+import { ExerciseDTO } from "@/dtos/ExercisesDTO";
 import React, { useState } from "react";
 
-const DEFAULT_VALUE = {
-  selectedExercise: null,
-  setSelectedExercise: () => {},
-};
-
-export const ExerciseContext =
-  React.createContext<IExerciseContext>(DEFAULT_VALUE);
+export const ExerciseContext = React.createContext<IExerciseContext>(
+  {} as IExerciseContext
+);
 
 export function ExerciseProvider({ children }: Props) {
-  const [exercises, setExercises] = useState(undefined);
-  const [selectedExercise, setSelectedExercise] = useState<string | null>(
-    DEFAULT_VALUE.selectedExercise
+  const [selectedExerciseID, setSelectedExerciseID] = useState<string | null>(
+    null
   );
+  const [selectedExerciseDetails, setSelectedExerciseDetails] =
+    useState<ExerciseDTO | null>({} as ExerciseDTO);
 
   return (
-    <ExerciseContext.Provider value={{ selectedExercise, setSelectedExercise }}>
+    <ExerciseContext.Provider
+      value={{
+        selectedExerciseID,
+        setSelectedExerciseID,
+        selectedExerciseDetails,
+        setSelectedExerciseDetails,
+      }}
+    >
       {children}
     </ExerciseContext.Provider>
   );
 }
 
-interface IExerciseContext {
-  selectedExercise: string | null;
-  setSelectedExercise: React.Dispatch<React.SetStateAction<string | null>>;
+export interface IExerciseContext {
+  selectedExerciseID: string | null;
+  setSelectedExerciseID: React.Dispatch<React.SetStateAction<string | null>>;
+  selectedExerciseDetails: ExerciseDTO | null;
+  setSelectedExerciseDetails: React.Dispatch<
+    React.SetStateAction<ExerciseDTO | null>
+  >;
 }
 
 interface Props {
