@@ -27,11 +27,11 @@ export default function TabsLayout() {
         options={{
           title: "",
           headerShown: false,
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: ({ size, color, focused }) => (
             <House
               size={size}
               color={color}
-              weight={color === THEME.colors.green[500] ? "bold" : "regular"}
+              weight={focused ? "bold" : "regular"}
             />
           ),
         }}
@@ -41,11 +41,11 @@ export default function TabsLayout() {
         options={{
           title: "",
           headerShown: false,
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: ({ size, color, focused }) => (
             <ClockCounterClockwise
               size={size}
               color={color}
-              weight={color === THEME.colors.green[500] ? "bold" : "regular"}
+              weight={focused ? "bold" : "regular"}
             />
           ),
         }}
@@ -55,11 +55,11 @@ export default function TabsLayout() {
         options={{
           title: "",
           headerShown: false,
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: ({ size, color, focused }) => (
             <UserCircle
               size={size}
               color={color}
-              weight={color === THEME.colors.green[500] ? "bold" : "regular"}
+              weight={focused ? "bold" : "regular"}
             />
           ),
         }}
