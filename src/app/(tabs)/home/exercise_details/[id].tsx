@@ -71,7 +71,7 @@ export default function selectedExerciseDetails() {
           <Box mb={3} rounded="lg" overflow="hidden">
             <Image
               source={{
-                uri: `${api.defaults.baseURL}exercise/demo/${selectedExerciseDetails.demo}`,
+                uri: `${api.defaults.baseURL}/exercise/demo/${selectedExerciseDetails.demo}`,
               }}
               alt="Selected Exercise demo"
               w="full"
@@ -81,7 +81,7 @@ export default function selectedExerciseDetails() {
           </Box>
         )}
 
-        <AppLoader loading={loading} />
+        <AppLoader loading={loading} size="lg" />
 
         {!loading && (
           <Box bg="gray.600" rounded="md" pb={4} px={4}>
