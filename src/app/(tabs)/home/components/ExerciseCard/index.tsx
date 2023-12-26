@@ -3,13 +3,15 @@ import { Entypo } from "@expo/vector-icons";
 
 import { Text, VStack, HStack, Image, Heading, Icon } from "native-base";
 
-import exercise1 from "@/assets/exercise1.png";
+import { ExerciseDTO } from "@/dtos/ExercisesDTO";
+
+import { api } from "@/services/api";
 
 interface Props extends TouchableOpacityProps {
-  title: string;
+  exercise: ExerciseDTO;
 }
 
-export function ExerciseCard({ title, ...rest }: Props) {
+export function ExerciseCard({ exercise, ...rest }: Props) {
   return (
     <TouchableOpacity {...rest}>
       <HStack
@@ -21,21 +23,23 @@ export function ExerciseCard({ title, ...rest }: Props) {
         mb={3}
       >
         <Image
-          source={exercise1}
-          alt="Exercise Image"
+          source={{
+            uri: `${api.defaults.baseURL}/exercise/thumb/${exercise.thumb}`,
+          }}
+          alt={exercise.thumb}
           w={16}
           h={16}
           rounded="md"
           mr={14}
-          resizeMode="cover"
+          resizeMode="center"
         />
 
         <VStack flex={1}>
           <Heading color="white" fontSize="lg" fontFamily="heading">
-            {title}
+            {exercise.name}
           </Heading>
           <Text fontSize="sm" color="gray.200" mt={1} numberOfLines={2}>
-            3 séries x 12 repetições
+            {exercise.series} séries x {exercise.repetitions} repetições
           </Text>
         </VStack>
 

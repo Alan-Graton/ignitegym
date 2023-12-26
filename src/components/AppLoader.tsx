@@ -1,9 +1,17 @@
 import { Center, Spinner, ISpinnerProps } from "native-base";
 
-export function AppLoader({ ...rest }: ISpinnerProps) {
+interface Props extends ISpinnerProps {
+  loading?: boolean;
+}
+
+export function AppLoader({ loading = true, ...rest }: Props) {
   return (
-    <Center flex={1} bg="gray.700">
-      <Spinner color="green.500" {...rest} />
-    </Center>
+    <>
+      {loading && (
+        <Center flex={1} bg="gray.700">
+          <Spinner animating={loading} color="green.500" {...rest} />
+        </Center>
+      )}
+    </>
   );
 }

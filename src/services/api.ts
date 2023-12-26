@@ -3,7 +3,7 @@ import axios from "axios";
 import { AppError } from "@/utils/AppError";
 
 const api = axios.create({
-  baseURL: `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:${process.env.EXPO_PUBLIC_PORT}/`,
+  baseURL: `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:${process.env.EXPO_PUBLIC_PORT}`,
 });
 
 api.interceptors.response.use(
