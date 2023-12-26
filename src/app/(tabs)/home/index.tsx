@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ExerciseContext } from "@/contexts/ExerciseContext";
+import { useExerciseContext } from "@/hooks/useExerciseContext";
 
 import { router, useFocusEffect } from "expo-router";
 
@@ -8,16 +8,17 @@ import { HStack, VStack, FlatList, Heading, Text, useToast } from "native-base";
 import { api } from "@/services/api";
 import { ExerciseDTO } from "@/dtos/ExercisesDTO";
 
+import { AppLoader } from "@/components/AppLoader";
+
 import { Group } from "./components/Group";
 import { ExerciseCard } from "./components/ExerciseCard";
 
 import { AppError } from "@/utils/AppError";
-import { AppLoader } from "@/components/AppLoader";
 
 export default function Home() {
   const toast = useToast();
 
-  const { setSelectedExercise } = React.useContext(ExerciseContext);
+  const { setSelectedExerciseID } = useExerciseContext();
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -27,9 +28,9 @@ export default function Home() {
   );
   const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
 
-  function handleOpenExerciseDetails(item: string) {
-    setSelectedExercise((prevState) => (prevState = item));
-    router.push("/(tabs)/home/exercise_details");
+  function handleOpenExerciseDetails(id: string) {
+    setSelectedExerciseID((prevState) => (prevState = id));
+    router.push(`/(tabs)/home/exercise_details/${id}`);
   }
 
   async function fetchGroups() {
@@ -53,8 +54,6 @@ export default function Home() {
     try {
       setLoading(true);
       const { data } = await api.get(`exercises/bygroup/${selectedGroup}`);
-
-      console.log("\n\nGET EXERCISES: ", data);
 
       setExercises(data);
     } catch (error) {
@@ -120,7 +119,7 @@ export default function Home() {
             renderItem={({ item }) => (
               <ExerciseCard
                 exercise={item}
-                onPress={() => handleOpenExerciseDetails(item.name)}
+                onPress={() => handleOpenExerciseDetails(item.id)}
               />
             )}
             showsVerticalScrollIndicator={false}
