@@ -30,7 +30,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isFetchingUserData, setIsFetchingUserData] = useState<boolean>(true);
   const [user, setUser] = useState<UserDTO>({} as UserDTO);
 
-  async function signIn(email: string, password: string) {
+  async function signIn(email: string, password: string): Promise<void> {
     try {
       const { data } = await api.post("sessions", { email, password });
 
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function signOut() {
+  async function signOut(): Promise<void> {
     try {
       await storageUserRemove();
     } catch (error) {
@@ -52,8 +52,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function loadUserData() {
+  async function loadUserData(): Promise<void> {
     try {
+      console.log("\n\n[AuthContext] Processing user Auth...");
       const loggedUser = await storageUserGet();
 
       if (loggedUser) {
