@@ -8,6 +8,12 @@ import {
   storageUserRemove,
 } from "@/storage/storageUser";
 
+import {
+  storageAuthTokenGet,
+  storageAuthTokenRemove,
+  storageAuthTokenSave,
+} from "@/storage/storageAuthToken";
+
 import { UserDTO } from "@/dtos/UserDTO";
 
 export const AuthContext = React.createContext<AuthContextDataProps>(
@@ -30,17 +36,47 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isFetchingUserData, setIsFetchingUserData] = useState<boolean>(true);
   const [user, setUser] = useState<UserDTO>({} as UserDTO);
 
+  async function userAndTokenUpdate(userData: UserDTO, token: string) {
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+    setUser(userData);
+  }
+
+  async function storageUserAndTokenSave(
+    user: UserDTO,
+    token: string
+  ): Promise<void> {
+    try {
+      setIsFetchingUserData(true);
+
+      await storageUserSave(user);
+      await storageAuthTokenSave(token);
+    } catch (error) {
+      console.error(
+        "\n\n[AuthContext] storageUserAndTokenSave FAILED: ",
+        error
+      );
+      throw error;
+    } finally {
+      setIsFetchingUserData(false);
+    }
+  }
+
   async function signIn(email: string, password: string): Promise<void> {
     try {
       const { data } = await api.post("sessions", { email, password });
 
-      if (data.user) {
-        setUser(data.user);
-        storageUserSave(data.user);
+      if (data.user && data.token) {
+        setIsFetchingUserData(true);
+
+        await storageUserAndTokenSave(data.user, data.token);
+        await userAndTokenUpdate(data.user, data.token);
       }
     } catch (error) {
-      console.error("\n\n[AuthContext] SignIn Error: ", error);
+      console.error("\n\n[AuthContext] signIn FAILED: ", error);
       throw error;
+    } finally {
+      setIsFetchingUserData(false);
     }
   }
 
@@ -50,8 +86,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser({} as UserDTO);
 
       await storageUserRemove();
+      await storageAuthTokenRemove();
     } catch (error) {
-      console.error("\n\n[AuthContext] SignOut Error: ", error);
+      console.error("\n\n[AuthContext] signOut FAILED: ", error);
       throw error;
     } finally {
       setIsFetchingUserData(false);
@@ -60,14 +97,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function loadUserData(): Promise<void> {
     try {
-      console.log("\n\n[AuthContext] Processing user Auth...");
-      const loggedUser = await storageUserGet();
+      setIsFetchingUserData(true);
 
-      if (loggedUser) {
-        setUser(loggedUser);
+      const loggedUser = await storageUserGet();
+      const getToken = await storageAuthTokenGet();
+
+      if (getToken && loggedUser) {
+        userAndTokenUpdate(loggedUser, getToken);
       }
     } catch (error) {
-      console.error("\n\n[AuthContext] Load user data Error: ", error);
+      console.error("\n\n[AuthContext] loadUserData FAILED: ", error);
       throw error;
     } finally {
       setIsFetchingUserData(false);
