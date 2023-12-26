@@ -19,11 +19,9 @@ export async function storageUserRemove(): Promise<void> {
   }
 }
 
-export async function storageUserGet(): Promise<UserDTO | undefined>  {
+export async function storageUserGet(): Promise<UserDTO | undefined> {
   try {
     const getUser = await AsyncStorage.getItem(USER_STORAGE);
-
-    console.log("\n\nAsync Storage Response: ", getUser);
 
     const user: UserDTO = getUser ? JSON.parse(getUser) : [];
 
