@@ -31,6 +31,8 @@ interface ILoginForm {
   password: string;
 }
 
+const DEFAULT_VALUES = { email: "", password: "" };
+
 export default function Login() {
   const { signIn } = useAuthContext();
 
@@ -44,10 +46,7 @@ export default function Login() {
     formState: { errors },
   } = useForm<ILoginForm>({
     resolver: yupResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: DEFAULT_VALUES,
   });
 
   async function onSubmit({ email, password }: ILoginForm) {

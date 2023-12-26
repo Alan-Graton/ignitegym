@@ -36,6 +36,14 @@ interface ISignupForm {
   picture?: string;
 }
 
+const DEFAULT_VALUES = {
+  name: "",
+  email: "",
+  password: "",
+  password_confirm: "",
+  picture: STATIC_USER_PICTURE,
+};
+
 export default function SignUp() {
   const {
     control,
@@ -43,13 +51,7 @@ export default function SignUp() {
     formState: { errors },
   } = useForm<ISignupForm>({
     resolver: yupResolver(signUpSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      password_confirm: "",
-      picture: STATIC_USER_PICTURE,
-    },
+    defaultValues: DEFAULT_VALUES,
   });
 
   const toast = useToast();
