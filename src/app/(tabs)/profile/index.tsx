@@ -14,22 +14,47 @@ import {
   useToast,
 } from "native-base";
 
+import { useForm, Controller } from "react-hook-form";
+import { profileSchema } from "@/schemas/profile";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { AppUserPicture } from "@/components/AppUserPicture";
 import { AppTextInput } from "@/components/AppTextInput";
 import { AppButton } from "@/components/AppButton";
 
 import { STATIC_USER_PICTURE } from "@/constants";
-import { Alert } from "react-native";
+import { useAuthContext } from "@/hooks/useAuthContext";
 const PIC_SIZE: number = 33;
 
+interface IProfileForm {
+  name?: string;
+  email?: string;
+  old_password?: string;
+  new_password?: string;
+  confirm_new_password?: string;
+}
+
 export default function Profile() {
-  const { user, setUser } = React.useContext(UserContext);
+  const toast = useToast();
+
+  const { user } = useAuthContext();
+
+  const { setUser } = React.useContext(UserContext);
 
   const [isPicLoading, setIsPicLoading] = React.useState<boolean>(false);
 
-  const toast = useToast();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IProfileForm>({
+    resolver: yupResolver(profileSchema),
+    defaultValues: {
+      name: user.name,
+      email: user.email,
+    },
+  });
 
-  // TODO: Apply D.R.Y
   const handleUserPicture = user.picture ? user.picture : STATIC_USER_PICTURE;
 
   async function handleChangePicture() {
@@ -48,12 +73,12 @@ export default function Profile() {
       if (response.assets[0].uri) {
         if (
           response.assets[0].fileSize &&
-          (response.assets[0].fileSize / 1024 / 1024 > 5)
+          response.assets[0].fileSize / 1024 / 1024 > 5
         ) {
           return toast.show({
             title: "Essa imagem é muito grande. Escolha uma de até 5MB.",
             placement: "top",
-            bg: 'red.500'
+            bg: "red.500",
           });
         }
 
@@ -72,6 +97,10 @@ export default function Profile() {
     } finally {
       setIsPicLoading(false);
     }
+  }
+
+  async function handleProfileUpdate(data: IProfileForm) {
+    console.log("\n\n[Profile] Form Data: ", data);
   }
 
   return (
@@ -100,12 +129,34 @@ export default function Profile() {
             </Text>
           </TouchableOpacity>
 
-          <AppTextInput placeholder="Nome" bg="gray.600" />
-          <AppTextInput
-            value="graton.alan@gmail.com"
-            placeholder="E-mail"
-            isDisabled
-            bg="gray.600"
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="Nome"
+                bg="gray.600"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.name?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="E-mail"
+                isDisabled
+                bg="gray.600"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.name?.message}
+              />
+            )}
           />
           <Heading
             color="gray.200"
@@ -117,22 +168,54 @@ export default function Profile() {
           >
             Alterar senha
           </Heading>
-          <AppTextInput
-            placeholder="Senha antiga"
-            secureTextEntry
-            bg="gray.600"
+          <Controller
+            control={control}
+            name="old_password"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="Senha antiga"
+                secureTextEntry
+                bg="gray.600"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                errorMessage={errors.name?.message}
+              />
+            )}
           />
-          <AppTextInput
-            placeholder="Nova senha"
-            secureTextEntry
-            bg="gray.600"
+          <Controller
+            control={control}
+            name="new_password"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="Nova senha"
+                secureTextEntry
+                bg="gray.600"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                errorMessage={errors.name?.message}
+              />
+            )}
           />
-          <AppTextInput
-            placeholder="Confirmar nova senha"
-            secureTextEntry
-            bg="gray.600"
+          <Controller
+            control={control}
+            name="confirm_new_password"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <AppTextInput
+                placeholder="Confirmar nova senha"
+                secureTextEntry
+                bg="gray.600"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                errorMessage={errors.name?.message}
+              />
+            )}
           />
-          <AppButton title="Atualizar" mt={4} />
+
+          <AppButton
+            title="Atualizar"
+            mt={4}
+            onPress={handleSubmit(handleProfileUpdate)}
+          />
         </Center>
       </ScrollView>
     </VStack>
