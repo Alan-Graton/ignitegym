@@ -26,8 +26,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import LogoSvg from "@/assets/logo.svg";
 import BackgroundImg from "@/assets/background.png";
 
-import { STATIC_USER_PICTURE } from "@/constants";
-
 interface ISignupForm {
   name: string;
   email: string;
@@ -41,7 +39,7 @@ const DEFAULT_VALUES = {
   email: "",
   password: "",
   password_confirm: "",
-  picture: STATIC_USER_PICTURE,
+  picture: "",
 };
 
 export default function SignUp() {
