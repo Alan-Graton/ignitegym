@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useExerciseContext } from "@/hooks/useExerciseContext";
 
-import { useGlobalSearchParams } from "expo-router";
+import { router, useGlobalSearchParams } from "expo-router";
 
 import {
   VStack,
@@ -17,12 +17,12 @@ import {
 import { api } from "@/services/api";
 
 import { AppButton } from "@/components/AppButton";
+import { AppLoader } from "@/components/AppLoader";
 
 import { AppError } from "@/utils/AppError";
 
 import SeriesSvg from "@/assets/series.svg";
 import RepetitionsSvg from "@/assets/repetitions.svg";
-import { AppLoader } from "@/components/AppLoader";
 
 export default function selectedExerciseDetails() {
   const { id }: { id: string } = useGlobalSearchParams();
@@ -32,7 +32,9 @@ export default function selectedExerciseDetails() {
   const { selectedExerciseDetails, setSelectedExerciseDetails } =
     useExerciseContext();
 
-  const [loading, setLoading] = React.useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isSubmitingRegister, setIsSubmitingRegister] =
+    useState<boolean>(false);
 
   async function fetchExerciseDetails() {
     try {
@@ -55,6 +57,36 @@ export default function selectedExerciseDetails() {
       toast.show({ title, placement: "top", bgColor: "red.500" });
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleExeciseHistoryRegister() {
+    try {
+      setIsSubmitingRegister(true);
+
+      await api.post("history", { exercise_id: id });
+
+      toast.show({
+        title: "Parabéns! Exercício regitrado no seu histórico",
+        placement: "top",
+        bgColor: "green.700",
+      });
+
+      router.push("/history/");
+    } catch (error) {
+      console.error(
+        "\n\n[selectedExerciseDetails] handleExeciseHistoryRegister FAILED: ",
+        error
+      );
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : "Não foi possível registrar o exercício.";
+
+      toast.show({ title, placement: "top", bgColor: "red.500" });
+    } finally {
+      setIsSubmitingRegister(false);
     }
   }
 
@@ -105,7 +137,11 @@ export default function selectedExerciseDetails() {
                 </Text>
               </HStack>
             </HStack>
-            <AppButton title="Marcar como realizado" />
+            <AppButton
+              title="Marcar como realizado"
+              isLoading={isSubmitingRegister}
+              onPress={handleExeciseHistoryRegister}
+            />
           </Box>
         )}
       </VStack>
