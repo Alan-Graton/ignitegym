@@ -29,15 +29,12 @@ export default function RootLayout() {
     );
   };
 
-  // TODO: Test this
   const AppContent = () => {
-    const { user } = useAuthContext();
+    const { isFetchingUserData } = useAuthContext();
 
-    console.log("\n\n[Root Layout - AppContent] User: ", user);
-
-    React.useEffect(() => {
-      router.push(user.id ? "/home/" : "/(login)");
-    }, [user]);
+    if (!fontsLoaded && isFetchingUserData) {
+      return <AppIsBuilding />;
+    }
 
     return (
       <Box flex={1} bg="gray.700">
