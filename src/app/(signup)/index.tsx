@@ -22,19 +22,11 @@ import { AppButton } from "@/components/AppButton";
 import { AppError } from "@/utils/AppError";
 
 import { useForm, Controller } from "react-hook-form";
-import { signUpSchema } from "@/schemas/singup";
+import { ISignupForm, signUpSchema } from "@/schemas/singup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import LogoSvg from "@/assets/logo.svg";
 import BackgroundImg from "@/assets/background.png";
-
-interface ISignupForm {
-  name: string;
-  email: string;
-  password: string;
-  password_confirm: string;
-  picture?: string;
-}
 
 const DEFAULT_VALUES = {
   name: "",

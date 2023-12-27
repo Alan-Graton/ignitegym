@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const signUpSchema = yup
+const signUpSchema = yup
   .object({
     name: yup.string().trim().required("Nome é obrigatório"),
     email: yup
@@ -19,3 +19,13 @@ export const signUpSchema = yup
     picture: yup.string(),
   })
   .required();
+
+interface ISignupForm {
+  name: string;
+  email: string;
+  password: string;
+  password_confirm: string;
+  picture?: string;
+}
+
+export { signUpSchema, ISignupForm };

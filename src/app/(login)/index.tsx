@@ -21,15 +21,10 @@ import { AppError } from "@/utils/AppError";
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginSchema } from "@/schemas/login";
+import { ILoginForm, loginSchema } from "@/schemas/login";
 
 import LogoSvg from "@/assets/logo.svg";
 import BackgroundImg from "@/assets/background.png";
-
-interface ILoginForm {
-  email: string;
-  password: string;
-}
 
 const DEFAULT_VALUES = { email: "", password: "" };
 
