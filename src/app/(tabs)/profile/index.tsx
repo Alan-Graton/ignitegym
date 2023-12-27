@@ -1,5 +1,5 @@
-import React from "react";
-import { UserContext } from "@/contexts/UserContext";
+import React, { useState } from "react";
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -14,34 +14,29 @@ import {
   useToast,
 } from "native-base";
 
+import { api } from "@/services/api";
+
 import { useForm, Controller } from "react-hook-form";
-import { profileSchema } from "@/schemas/profile";
+import { IProfileForm, profileSchema } from "@/schemas/profile";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { AppUserPicture } from "@/components/AppUserPicture";
 import { AppTextInput } from "@/components/AppTextInput";
 import { AppButton } from "@/components/AppButton";
 
-import { STATIC_USER_PICTURE } from "@/constants";
-import { useAuthContext } from "@/hooks/useAuthContext";
-const PIC_SIZE: number = 33;
+import { AppError } from "@/utils/AppError";
 
-interface IProfileForm {
-  name?: string;
-  email?: string;
-  old_password?: string;
-  new_password?: string;
-  confirm_new_password?: string;
-}
+import { STATIC_USER_PICTURE } from "@/constants";
+const PIC_SIZE: number = 33;
 
 export default function Profile() {
   const toast = useToast();
 
-  const { user } = useAuthContext();
+  const { user, updateUserProfile } = useAuthContext();
 
-  const { setUser } = React.useContext(UserContext);
-
-  const [isPicLoading, setIsPicLoading] = React.useState<boolean>(false);
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
+  const [isPicLoading, setIsPicLoading] = useState<boolean>(false);
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
   const {
     control,
@@ -52,6 +47,9 @@ export default function Profile() {
     defaultValues: {
       name: user.name,
       email: user.email,
+      old_password: null,
+      password: null,
+      confirm_password: null,
     },
   });
 
@@ -82,10 +80,12 @@ export default function Profile() {
           });
         }
 
-        setUser((prevState) => ({
-          ...prevState,
-          picture: response.assets[0].uri,
-        }));
+        setProfilePicture(response.assets[0].uri);
+
+        // setUser((prevState) => ({
+        //   ...prevState,
+        //   picture: response.assets[0].uri,
+        // }));
       }
     } catch (e) {
       console.error(
@@ -100,7 +100,33 @@ export default function Profile() {
   }
 
   async function handleProfileUpdate(data: IProfileForm) {
-    console.log("\n\n[Profile] Form Data: ", data);
+    try {
+      setIsUpdatingProfile(true);
+
+      await api.put("users", data);
+
+      const updatedUser = user;
+      updatedUser.name = data.name;
+
+      await updateUserProfile(updatedUser);
+
+      toast.show({
+        title: "Perfil atualizado com sucesso!",
+        placement: "top",
+        bgColor: "green.500",
+      });
+    } catch (error) {
+      console.error("\n\n[Profile] handleProfileUpdate FAILED: ", error);
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : "Não foi possível salvar as alterações. Tente novamente mais tarde.";
+
+      toast.show({ title, placement: "top", bgColor: "red.500" });
+    } finally {
+      setIsUpdatingProfile(false);
+    }
   }
 
   return (
@@ -146,15 +172,12 @@ export default function Profile() {
           <Controller
             control={control}
             name="email"
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { value } }) => (
               <AppTextInput
                 placeholder="E-mail"
                 isDisabled
                 bg="gray.600"
-                onBlur={onBlur}
-                onChangeText={onChange}
                 value={value}
-                errorMessage={errors.name?.message}
               />
             )}
           />
@@ -171,42 +194,42 @@ export default function Profile() {
           <Controller
             control={control}
             name="old_password"
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { onChange, onBlur } }) => (
               <AppTextInput
                 placeholder="Senha antiga"
                 secureTextEntry
                 bg="gray.600"
                 onBlur={onBlur}
                 onChangeText={onChange}
-                errorMessage={errors.name?.message}
+                errorMessage={errors.old_password?.message}
               />
             )}
           />
           <Controller
             control={control}
-            name="new_password"
-            render={({ field: { onChange, onBlur, value } }) => (
+            name="password"
+            render={({ field: { onChange, onBlur } }) => (
               <AppTextInput
                 placeholder="Nova senha"
                 secureTextEntry
                 bg="gray.600"
                 onBlur={onBlur}
                 onChangeText={onChange}
-                errorMessage={errors.name?.message}
+                errorMessage={errors.password?.message}
               />
             )}
           />
           <Controller
             control={control}
-            name="confirm_new_password"
-            render={({ field: { onChange, onBlur, value } }) => (
+            name="confirm_password"
+            render={({ field: { onChange, onBlur } }) => (
               <AppTextInput
                 placeholder="Confirmar nova senha"
                 secureTextEntry
                 bg="gray.600"
                 onBlur={onBlur}
                 onChangeText={onChange}
-                errorMessage={errors.name?.message}
+                errorMessage={errors.confirm_password?.message}
               />
             )}
           />
@@ -215,6 +238,7 @@ export default function Profile() {
             title="Atualizar"
             mt={4}
             onPress={handleSubmit(handleProfileUpdate)}
+            isLoading={isUpdatingProfile}
           />
         </Center>
       </ScrollView>

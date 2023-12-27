@@ -26,6 +26,7 @@ export interface AuthContextDataProps {
   signOut: () => Promise<void>;
   isFetchingUserData: boolean;
   setIsFetchingUserData: (state: boolean) => void;
+  updateUserProfile: (updatedUser: UserDTO) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -95,6 +96,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function updateUserProfile(updatedUser: UserDTO) {
+    try {
+      setUser((prevState) => (prevState = updatedUser));
+
+      await storageUserSave(updatedUser);
+    } catch (error) {
+      console.error("\n\n[AuthContext] updateUserProfile FAILED: ", error);
+      throw error;
+    }
+  }
+
   async function loadUserData(): Promise<void> {
     try {
       setIsFetchingUserData(true);
@@ -125,6 +137,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         signOut,
         isFetchingUserData,
         setIsFetchingUserData,
+        updateUserProfile,
       }}
     >
       {children}
