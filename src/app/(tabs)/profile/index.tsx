@@ -53,7 +53,7 @@ export default function Profile() {
     },
   });
 
-  const handleUserPicture = user.picture ? user.picture : STATIC_USER_PICTURE;
+  const handleUserPicture = user.avatar ? user.avatar : STATIC_USER_PICTURE;
 
   async function handleChangePicture() {
     try {
@@ -68,10 +68,12 @@ export default function Profile() {
 
       if (response.canceled) return;
 
-      if (response.assets[0].uri) {
+      const selectedPicture = response.assets[0];
+
+      if (selectedPicture.uri) {
         if (
-          response.assets[0].fileSize &&
-          response.assets[0].fileSize / 1024 / 1024 > 5
+          selectedPicture.fileSize &&
+          selectedPicture.fileSize / 1024 / 1024 > 5
         ) {
           return toast.show({
             title: "Essa imagem é muito grande. Escolha uma de até 5MB.",
@@ -80,17 +82,31 @@ export default function Profile() {
           });
         }
 
-        setProfilePicture(response.assets[0].uri);
+        const fileExtension = selectedPicture.uri.split(".").pop();
 
-        // setUser((prevState) => ({
-        //   ...prevState,
-        //   picture: response.assets[0].uri,
-        // }));
+        const avatarFile = {
+          name: `${user.name}.${fileExtension}`.toLocaleLowerCase(),
+          uri: selectedPicture.uri,
+          type: `${selectedPicture.type}/${fileExtension}`,
+        };
+
+        const userPictureUploadForm = new FormData();
+        userPictureUploadForm.append("avatar", avatarFile);
+
+        await api.patch("users/avatar", userPictureUploadForm, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        toast.show({
+          title: "Foto atualizada!",
+          placement: "top",
+          bgColor: "green.500",
+        });
       }
-    } catch (e) {
+    } catch (error) {
       console.error(
         "\n\n[Profile] Error while selecting new Profile Picture: ",
-        e
+        error
       );
 
       return;

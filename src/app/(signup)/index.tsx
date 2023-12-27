@@ -33,7 +33,7 @@ const DEFAULT_VALUES = {
   email: "",
   password: "",
   password_confirm: "",
-  picture: "",
+  avatar: "",
 };
 
 export default function SignUp() {

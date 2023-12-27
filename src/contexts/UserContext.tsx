@@ -4,7 +4,7 @@ const DEFAULT_VALUE = {
   user: {
     email: "",
     password: "",
-    picture: "",
+    avatar: "",
   },
   setUser: () => {},
 };
@@ -30,7 +30,7 @@ export function UserProvider({ children }: Props) {
 interface IUser {
   email: string;
   password: string;
-  picture: string;
+  avatar: string;
 }
 
 interface IUserContext {

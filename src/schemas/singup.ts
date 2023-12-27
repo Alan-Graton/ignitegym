@@ -16,7 +16,7 @@ const signUpSchema = yup
       .string()
       .required("Confirme a senha")
       .oneOf([yup.ref("password")], "Senhas não são iguais"),
-    picture: yup.string(),
+    avatar: yup.string(),
   })
   .required();
 
@@ -25,7 +25,7 @@ interface ISignupForm {
   email: string;
   password: string;
   password_confirm: string;
-  picture?: string;
+  avatar?: string;
 }
 
 export { signUpSchema, ISignupForm };

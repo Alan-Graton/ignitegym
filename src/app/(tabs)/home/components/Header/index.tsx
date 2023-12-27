@@ -40,7 +40,7 @@ export function Header() {
       safeArea
     >
       <AppUserPicture
-        source={user.picture ? { uri: user.picture } : defaultPicture}
+        source={user.avatar ? { uri: user.avatar } : defaultPicture}
         w={50}
         h={50}
       />

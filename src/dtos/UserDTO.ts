@@ -2,14 +2,14 @@ interface UserDTO {
   id: string;
   name: string;
   email: string;
-  picture: string;
+  avatar: string;
 }
 
 const DEFAULT_VALUE = {
   id: "",
   name: "",
   email: "",
-  picture: "",
+  avatar: "",
 };
 
 export { UserDTO, DEFAULT_VALUE };
