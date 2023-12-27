@@ -1,10 +1,9 @@
 import React from "react";
-import { router, Slot } from "expo-router";
+import { Slot } from "expo-router";
 import { NativeBaseProvider, Box, Center } from "native-base";
 import { StatusBar } from "expo-status-bar";
 
 import { AuthProvider } from "@/contexts/AuthContext";
-import { UserProvider } from "@/contexts/UserContext";
 import { ExerciseProvider } from "@/contexts/ExerciseContext";
 
 import { useAuthContext } from "@/hooks/useAuthContext";
@@ -53,11 +52,9 @@ export default function RootLayout() {
     <>
       <NativeBaseProvider theme={THEME}>
         <AuthProvider>
-          <UserProvider>
-            <ExerciseProvider>
-              {fontsLoaded ? <AppContent /> : <AppIsBuilding />}
-            </ExerciseProvider>
-          </UserProvider>
+          <ExerciseProvider>
+            {fontsLoaded ? <AppContent /> : <AppIsBuilding />}
+          </ExerciseProvider>
         </AuthProvider>
       </NativeBaseProvider>
     </>
