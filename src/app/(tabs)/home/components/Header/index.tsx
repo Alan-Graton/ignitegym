@@ -10,7 +10,7 @@ import { AppUserPicture } from "@/components/AppUserPicture";
 
 import { MaterialIcons } from "@expo/vector-icons";
 
-import defaultPicture from "@/assets/userPhotoDefault.png";
+import { handleUserAvatar } from "@/utils/handleUserAvatar";
 
 export function Header() {
   const { user, signOut } = useAuthContext();
@@ -39,11 +39,7 @@ export function Header() {
       justifyContent="space-between"
       safeArea
     >
-      <AppUserPicture
-        source={user.avatar ? { uri: user.avatar } : defaultPicture}
-        w={50}
-        h={50}
-      />
+      <AppUserPicture source={handleUserAvatar(user)} w={50} h={50} />
 
       <VStack flex={1} ml={4}>
         <Text color="gray.100" fontSize="md">

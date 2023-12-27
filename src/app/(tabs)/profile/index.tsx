@@ -25,8 +25,9 @@ import { AppTextInput } from "@/components/AppTextInput";
 import { AppButton } from "@/components/AppButton";
 
 import { AppError } from "@/utils/AppError";
+import { handleUserAvatar } from "@/utils/handleUserAvatar";
 
-import { STATIC_USER_PICTURE } from "@/constants";
+
 const PIC_SIZE: number = 33;
 
 export default function Profile() {
@@ -36,7 +37,6 @@ export default function Profile() {
 
   const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
   const [isPicLoading, setIsPicLoading] = useState<boolean>(false);
-  const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
   const {
     control,
@@ -52,8 +52,6 @@ export default function Profile() {
       confirm_password: null,
     },
   });
-
-  const handleUserPicture = user.avatar ? user.avatar : STATIC_USER_PICTURE;
 
   async function handleChangePicture() {
     try {
@@ -93,9 +91,18 @@ export default function Profile() {
         const userPictureUploadForm = new FormData();
         userPictureUploadForm.append("avatar", avatarFile);
 
-        await api.patch("users/avatar", userPictureUploadForm, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        const { data } = await api.patch(
+          "users/avatar",
+          userPictureUploadForm,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+
+        const updatedUser = user;
+        updatedUser.avatar = data.avatar;
+
+        updateUserProfile(updatedUser);
 
         toast.show({
           title: "Foto atualizada!",
@@ -149,7 +156,7 @@ export default function Profile() {
     <VStack flex={1} bg="gray.700">
       <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
         <Center mt={6} px={10}>
-          {isPicLoading && (
+          {isPicLoading ? (
             <Skeleton
               w={PIC_SIZE}
               h={PIC_SIZE}
@@ -157,12 +164,8 @@ export default function Profile() {
               startColor="gray.500"
               endColor="gray.400"
             />
-          )}
-          {!isPicLoading && (
-            <AppUserPicture
-              source={{ uri: handleUserPicture }}
-              size={PIC_SIZE}
-            />
+          ) : (
+            <AppUserPicture source={handleUserAvatar(user)} size={PIC_SIZE} />
           )}
 
           <TouchableOpacity onPress={handleChangePicture}>
