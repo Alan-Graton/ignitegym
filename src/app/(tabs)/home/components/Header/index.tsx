@@ -23,8 +23,6 @@ export function Header() {
 
       setSelectedExerciseID(null);
       setSelectedExerciseDetails(null);
-
-      router.canGoBack() ? router.back() : router.push("/(login)");
     } catch (error) {
       console.error("\n\n[Home] Signing Out Error: ", error);
     }

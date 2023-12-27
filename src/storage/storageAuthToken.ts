@@ -2,9 +2,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { AUTH_TOKEN_STORAGE } from "@/storage/storageConfig";
 
-export async function storageAuthTokenSave(token: string): Promise<void> {
+interface StorageAuthTokenProps {
+  token: string;
+  refresh_token: string;
+}
+
+export async function storageAuthTokenSave({
+  token,
+  refresh_token,
+}: StorageAuthTokenProps) {
   try {
-    await AsyncStorage.setItem(AUTH_TOKEN_STORAGE, token);
+    await AsyncStorage.setItem(
+      AUTH_TOKEN_STORAGE,
+      JSON.stringify({ token, refresh_token })
+    );
   } catch (error) {
     console.error(
       "\n\n[storageAuthToken] storageAuthTokenSave FAILED: ",
@@ -14,14 +25,19 @@ export async function storageAuthTokenSave(token: string): Promise<void> {
 }
 
 export async function storageAuthTokenGet(): Promise<
-  string | null | undefined
+  { token: string; refresh_token: string } | undefined
 > {
   try {
-    const token = await AsyncStorage.getItem(AUTH_TOKEN_STORAGE);
+    const response = await AsyncStorage.getItem(AUTH_TOKEN_STORAGE);
 
-    return token;
+    const { token, refresh_token }: StorageAuthTokenProps = response
+      ? JSON.parse(response)
+      : [];
+
+    return { token, refresh_token };
   } catch (error) {
     console.error("\n\n[storageAuthToken] storageAuthTokenGet FAILED: ", error);
+    return;
   }
 }
 

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { router } from "expo-router";
 
 import { api } from "@/services/api";
 
@@ -45,13 +46,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function storageUserAndTokenSave(
     user: UserDTO,
-    token: string
+    token: string,
+    refresh_token: string
   ): Promise<void> {
     try {
       setIsFetchingUserData(true);
 
       await storageUserSave(user);
-      await storageAuthTokenSave(token);
+      await storageAuthTokenSave({ token, refresh_token });
     } catch (error) {
       console.error(
         "\n\n[AuthContext] storageUserAndTokenSave FAILED: ",
@@ -67,10 +69,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const { data } = await api.post("sessions", { email, password });
 
-      if (data.user && data.token) {
+      if (data.user && data.token && data.refresh_token) {
         setIsFetchingUserData(true);
 
-        await storageUserAndTokenSave(data.user, data.token);
+        await storageUserAndTokenSave(
+          data.user,
+          data.token,
+          data.refresh_token
+        );
         await userAndTokenUpdate(data.user, data.token);
       }
     } catch (error) {
@@ -88,6 +94,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       await storageUserRemove();
       await storageAuthTokenRemove();
+
+      router.push("/(login)");
     } catch (error) {
       console.error("\n\n[AuthContext] signOut FAILED: ", error);
       throw error;
@@ -112,10 +120,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setIsFetchingUserData(true);
 
       const loggedUser = await storageUserGet();
-      const getToken = await storageAuthTokenGet();
+      const getTokens = await storageAuthTokenGet();
 
-      if (getToken && loggedUser) {
-        userAndTokenUpdate(loggedUser, getToken);
+      if (getTokens?.token && loggedUser) {
+        userAndTokenUpdate(loggedUser, getTokens.token);
       }
     } catch (error) {
       console.error("\n\n[AuthContext] loadUserData FAILED: ", error);
@@ -125,9 +133,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     loadUserData();
   }, []);
+
+  useEffect(() => {
+    const subscribe = api.registerInterceptTokenManager(signOut);
+
+    return () => {
+      subscribe();
+    };
+  }, [signOut]);
 
   return (
     <AuthContext.Provider
