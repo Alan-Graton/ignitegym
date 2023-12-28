@@ -15,7 +15,7 @@ Aplicativo desenvolvido em aula durante 3 módulos onde o usuário pode:
 ## TODO
 
 - [X] 1º Módulo: Desenvolvimento das Interfaces e rotas ✔️
-- [ ] 2º Módulo: Integração com Backend 🚧
+- [X] 2º Módulo: Integração com Backend ✔️
 - [ ] 3º Módulo: Configuração de **Push Notifications** e **Deep Linking** 🚧
 
 ## Techs
